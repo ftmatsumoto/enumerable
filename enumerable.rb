@@ -22,7 +22,7 @@ module Enumerable
   	if block_given?
   		self.my_each { |i| return false if yield(i) == false }
   	else 
-  		return false
+  		self.my_each { |i| return false unless i }
   	end
   	true
   end
@@ -31,12 +31,45 @@ module Enumerable
   	if block_given?
   		self.my_each { |i| return true if yield(i) == true }
   	else
-  		return true
+  		self.my_each { |i| return true if i }
   	end
   	false
-  end  
+  end
+
+  def my_none?
+  	if block_given?
+      my_each { |i| return false if yield(i) }
+    else
+      my_each { |i| return false if i }
+    end
+    true
+  end
+
+  def my_count(number = nil)
+  	counter = 0
+  	if block_given?
+      my_each { |i| counter += 1 if yield(i) }
+  	elsif number.nil?
+  		counter = length
+  	else
+      my_each { |i| counter += 1 if i == number }
+  	end
+  	counter
+  end
+
+  def my_map
+    result_array = []
+    if block_given?
+      my_each do |i|
+        result_array << yield(i)
+      end
+      return result_array
+    else
+      return self
+    end
+  end
 
 end
 
-print [1,2,3,4,5].any? { |x| x%2==0 }
-print [1,2,3,4,5].my_any? { |x| x%2==0 }
+print [1,2,3,4,5].map {|x| x==2 }
+print [1,2,3,4,5].my_map {|x| x==2 }
