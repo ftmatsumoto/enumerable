@@ -14,13 +14,20 @@ module Enumerable
 
   def my_select
     result_array = []
-    for i in self
-      result_array << i if yield(i) == true
-    end
+    self.my_each { |i| result_array << i if yield(i) == true } if block_given?
     return result_array
+  end
+
+  def my_all?
+  	if block_given?
+  		self.my_each { |i| return false if yield(i) == false }
+  	else 
+  		return false
+  	end
+  	true
   end
 
 end
 
-print [1,2,3,4,5].select { |x| x%2==0 }
-print [1,2,3,4,5].my_select { |x| x%2==0 }
+print [1,2,3,4,5].all? { |x| x%2==0 }
+print [1,2,3,4,5].my_all? { |x| x%2==0 }
