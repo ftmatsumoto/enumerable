@@ -27,7 +27,16 @@ module Enumerable
   	true
   end
 
+  def my_any?
+  	if block_given?
+  		self.my_each { |i| return true if yield(i) == true }
+  	else
+  		return true
+  	end
+  	false
+  end  
+
 end
 
-print [1,2,3,4,5].all? { |x| x%2==0 }
-print [1,2,3,4,5].my_all? { |x| x%2==0 }
+print [1,2,3,4,5].any? { |x| x%2==0 }
+print [1,2,3,4,5].my_any? { |x| x%2==0 }
